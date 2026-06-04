@@ -1,65 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>SALIMBAGO 2026 DP Blast Generator</title>
-</head>
-<body>
+photo.onload = function() {
 
-<h1>SALIMBAGO 2026 DP Blast Generator</h1>
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-<input type="file" id="upload">
+    const canvasRatio = canvas.width / canvas.height;
+    const imageRatio = photo.width / photo.height;
 
-<br><br>
+    let sx, sy, sWidth, sHeight;
 
-<canvas id="canvas" width="1080" height="1080" style="max-width:500px;border:1px solid #ccc;"></canvas>
+    if (imageRatio > canvasRatio) {
+        sHeight = photo.height;
+        sWidth = sHeight * canvasRatio;
+        sx = (photo.width - sWidth) / 2;
+        sy = 0;
+    } else {
+        sWidth = photo.width;
+        sHeight = sWidth / canvasRatio;
+        sx = 0;
+        sy = (photo.height - sHeight) / 2;
+    }
 
-<br><br>
+    ctx.drawImage(
+        photo,
+        sx,
+        sy,
+        sWidth,
+        sHeight,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
-<button onclick="downloadImage()">Download Image</button>
-
-<script>
-
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
-const frame = new Image();
-frame.src = 'frame.png';
-
-document.getElementById('upload').addEventListener('change', function(e){
-
-    const file = e.target.files[0];
-
-    if(!file) return;
-
-    const photo = new Image();
-
-    photo.onload = function(){
-
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-
-        // draw uploaded photo
-        ctx.drawImage(photo,0,0,canvas.width,canvas.height);
-
-        // draw frame on top
-        ctx.drawImage(frame,0,0,canvas.width,canvas.height);
-    };
-
-    photo.src = URL.createObjectURL(file);
-
-});
-
-function downloadImage(){
-
-    const link = document.createElement('a');
-
-    link.download = 'salimbago2026-profile-frame.png';
-
-    link.href = canvas.toDataURL('image/png');
-
-    link.click();
-}
-
-</script>
-
-</body>
-</html>
+    ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
+};
