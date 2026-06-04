@@ -1,35 +1,90 @@
-photo.onload = function() {
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SALIMBAGO 2026 DP Blast Generator</title>
+</head>
+<body>
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+<h1>SALIMBAGO 2026 DP Blast Generator</h1>
 
-    const canvasRatio = canvas.width / canvas.height;
-    const imageRatio = photo.width / photo.height;
+<input type="file" id="upload">
 
-    let sx, sy, sWidth, sHeight;
+<br><br>
 
-    if (imageRatio > canvasRatio) {
-        sHeight = photo.height;
-        sWidth = sHeight * canvasRatio;
-        sx = (photo.width - sWidth) / 2;
-        sy = 0;
-    } else {
-        sWidth = photo.width;
-        sHeight = sWidth / canvasRatio;
-        sx = 0;
-        sy = (photo.height - sHeight) / 2;
-    }
+<canvas id="canvas" width="1080" height="1080" style="max-width:500px;border:1px solid #ccc;"></canvas>
 
-    ctx.drawImage(
-        photo,
-        sx,
-        sy,
-        sWidth,
-        sHeight,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+<br><br>
 
-    ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
-};
+<button onclick="downloadImage()">Download Image</button>
+
+<script>
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+const frame = new Image();
+frame.src = 'frame.png';
+
+document.getElementById('upload').addEventListener('change', function(e){
+
+    const file = e.target.files[0];
+
+    if(!file) return;
+
+    const photo = new Image();
+
+    photo.onload = function() {
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const canvasRatio = canvas.width / canvas.height;
+        const imageRatio = photo.width / photo.height;
+
+        let sx, sy, sWidth, sHeight;
+
+        if (imageRatio > canvasRatio) {
+            sHeight = photo.height;
+            sWidth = sHeight * canvasRatio;
+            sx = (photo.width - sWidth) / 2;
+            sy = 0;
+        } else {
+            sWidth = photo.width;
+            sHeight = sWidth / canvasRatio;
+            sx = 0;
+            sy = (photo.height - sHeight) / 2;
+        }
+
+        ctx.drawImage(
+            photo,
+            sx,
+            sy,
+            sWidth,
+            sHeight,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
+    };
+
+    photo.src = URL.createObjectURL(file);
+
+});
+
+function downloadImage(){
+
+    const link = document.createElement('a');
+
+    link.download = 'salimbago2026-profile-frame.png';
+
+    link.href = canvas.toDataURL('image/png');
+
+    link.click();
+}
+
+</script>
+
+</body>
+</html>
